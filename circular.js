@@ -24,16 +24,23 @@ class Particle {
     this.radius = radius;
     this.color = randColor();
     this.radians = 0;
+    this.velocity = 1;
   }
   draw() {
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fillStyle = this.color;
     ctx.fill();
     ctx.closePath();
   }
   update() {
-    this.x += Math.cos(this.radians);
+    // move points overtime over a periodic function
+    this.radians += this.velocity;
+    this.x =
+      window.innerWidth / 2 + Math.cos((this.radians * Math.PI) / 180) * 100;
+    this.y =
+      window.innerHeight / 2 + Math.sin((this.radians * Math.PI) / 180) * 100;
+
     this.draw();
   }
 }
@@ -55,8 +62,8 @@ function animate() {
   particles.forEach((particle) => {
     particle.update();
   });
-  console.log("This is running");
-  // requestAnimationFrame(animate);
+
+  requestAnimationFrame(animate);
 }
 
 animate();
