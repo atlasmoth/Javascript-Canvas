@@ -8,6 +8,12 @@ window.addEventListener("resize", (e) => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
+let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+canvas.addEventListener("mousemove", (e) => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
 //end of resize
 // random color generator
 function randColor() {
@@ -19,29 +25,35 @@ function randColor() {
 
 class Particle {
   constructor(radius) {
-    this.x = window.innerWidth / 2;
-    this.y = window.innerHeight / 2;
-    this.radius = radius;
+    this.x = mouse.x;
+    this.y = mouse.y;
+    this.radius = randomNumber(10, radius);
     this.color = randColor();
-    this.radians = 0;
+    this.radians = Math.random() * 360;
     this.velocity = 1;
   }
-  draw() {
+  draw({ x, y }) {
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = this.color;
-    ctx.fill();
+    ctx.strokeStyle = this.color;
+    ctx.lineWidth = this.radius;
+    ctx.lineCap = "round";
+    ctx.moveTo(x, y);
+    ctx.lineTo(this.x, this.y);
+    ctx.stroke();
     ctx.closePath();
   }
   update() {
     // move points overtime over a periodic function
+    const lastPoint = { x: this.x, y: this.y };
     this.radians += this.velocity;
-    this.x =
-      window.innerWidth / 2 + Math.cos((this.radians * Math.PI) / 180) * 100;
-    this.y =
-      window.innerHeight / 2 + Math.sin((this.radians * Math.PI) / 180) * 100;
 
-    this.draw();
+    this.x =
+      mouse.x + Math.cos((this.radians * Math.PI) / 180) * this.radius * 5.5;
+    this.y =
+      mouse.y / 2 +
+      Math.sin((this.radians * Math.PI) / 180) * this.radius * 5.5;
+
+    this.draw(lastPoint);
   }
 }
 
@@ -50,19 +62,24 @@ class Particle {
 const particles = [];
 
 function init() {
-  for (let i = 0; i < 1; i++) {
-    particles.push(new Particle(10));
+  for (let i = 0; i < 50; i++) {
+    particles.push(new Particle(40));
   }
 }
 
 (() => init())();
-
+// random number generator within a range
+function randomNumber(min, max) {
+  return Math.random() * (max - min) + min;
+}
+//
 function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = `rgba(255,255,255,0.05)`;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
   particles.forEach((particle) => {
     particle.update();
   });
-
   requestAnimationFrame(animate);
 }
 
