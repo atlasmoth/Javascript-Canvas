@@ -10,7 +10,7 @@ window.addEventListener("resize", (e) => {
 });
 let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 
-canvas.addEventListener("mousemove", (e) => {
+window.addEventListener("mousemove", (e) => {
   mouse.x = e.clientX;
   mouse.y = e.clientY;
 });
@@ -25,12 +25,12 @@ function randColor() {
 
 class Particle {
   constructor(radius) {
-    this.x = mouse.x;
-    this.y = mouse.y;
+    this.x = canvas.width / 2;
+    this.y = canvas.height / 2;
     this.radius = randomNumber(10, radius);
     this.color = randColor();
     this.radians = Math.random() * 360;
-    this.velocity = 1;
+    this.velocity = 1.5;
   }
   draw({ x, y }) {
     ctx.beginPath();
@@ -48,10 +48,9 @@ class Particle {
     this.radians += this.velocity;
 
     this.x =
-      mouse.x + Math.cos((this.radians * Math.PI) / 180) * this.radius * 5.5;
+      mouse.x + Math.cos((this.radians * Math.PI) / 180) * this.radius * 4;
     this.y =
-      mouse.y / 2 +
-      Math.sin((this.radians * Math.PI) / 180) * this.radius * 5.5;
+      mouse.y + Math.sin((this.radians * Math.PI) / 180) * this.radius * 4;
 
     this.draw(lastPoint);
   }
@@ -62,7 +61,7 @@ class Particle {
 const particles = [];
 
 function init() {
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 20; i++) {
     particles.push(new Particle(40));
   }
 }
