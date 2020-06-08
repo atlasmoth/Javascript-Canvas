@@ -4,22 +4,51 @@ const ctx = canvas.getContext("2d");
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
-function main() {
-  let y = 0;
-  const speed = 3;
-  const animate = () => {
-    ctx.beginPath();
-    ctx.moveTo(y, 300 + Math.sin((y * Math.PI) / 180) * 100);
-    y += speed;
+window.addEventListener("resize", (e) => {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+});
 
-    ctx.lineTo(y, 300 + Math.sin((y * Math.PI) / 180) * 100);
-    ctx.lineCap = "round";
-    ctx.stroke();
-    console.log(300 + Math.sin((y * Math.PI) / 180));
-    if (y < canvas.width) {
-      requestAnimationFrame(animate);
+function randomNumber(min, max) {
+  return Math.random() * (max - min) + min;
+}
+function randColor() {
+  //
+  const rand = () => Math.floor(Math.random() * 266);
+  return `rgb(${rand()},${rand()},${rand()})`;
+}
+// formula for sinusodial modelling
+// y = Asin(Bx -c) + D
+// A = amplitude
+// B = period
+// D = vertical translation
+function main() {
+  const speed = 1;
+  let displacement = 0;
+
+  function animate() {
+    //
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const amplitude = randomNumber(10, 200);
+    const period = randomNumber(1, 10);
+    const vertical = randomNumber(200, 500);
+    // looping the line bruh
+    for (let x = 0; x < innerWidth; x++) {
+      ctx.beginPath();
+      ctx.moveTo(
+        x,
+        amplitude * Math.sin((period * (x * Math.PI)) / 180) + vertical
+      );
+      ctx.lineTo(
+        x + speed,
+        amplitude * Math.sin((period * (x + speed) * Math.PI) / 180) + vertical
+      );
+      ctx.lineWidth = "5px";
+      ctx.lineCap = "round";
+      ctx.stroke();
     }
-  };
+    requestAnimationFrame(animate);
+  }
   return {
     animate,
   };

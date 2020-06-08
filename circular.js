@@ -61,7 +61,7 @@ class Particle {
 const particles = [];
 
 function init() {
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 50; i++) {
     particles.push(new Particle(40));
   }
 }
