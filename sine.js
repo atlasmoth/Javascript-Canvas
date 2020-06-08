@@ -31,7 +31,7 @@ function main() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const amplitude = randomNumber(10, 200);
     const period = randomNumber(1, 10);
-    const vertical = randomNumber(200, 500);
+    const vertical = innerHeight / 2;
     // looping the line bruh
     for (let x = 0; x < innerWidth; x++) {
       ctx.beginPath();
@@ -45,9 +45,11 @@ function main() {
       );
       ctx.lineWidth = "5px";
       ctx.lineCap = "round";
+      // ctx.strokeStyle = randColor();
       ctx.stroke();
     }
-    requestAnimationFrame(animate);
+    //
+    // requestAnimationFrame(animate);
   }
   return {
     animate,
